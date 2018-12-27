@@ -17,7 +17,7 @@ podTemplate(label: label,
             git url: 'https://github.com/katson95/pet-clinic-k8.git'
         }
          
-        def IMAGE_NAMES = 'katson95/pet-clinic'
+        def IMAGE_NAME = 'katson95/pet-clinic'
         def IMAGE_VERSION = 'latest'        
         
        stage('Get a Maven project') {
