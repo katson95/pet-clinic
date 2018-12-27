@@ -48,7 +48,7 @@ podTemplate(label: label,
         stage('Deploy To Dev') {
             container('i360-agent'){  
                 stage('Deploy To Dev') {
-                    sh 'kubectl create ns DEV'
+                    sh 'kubectl create ns dev'
                     sh 'kubectl create -f ./pet-clinic-k8/ --namespace=DEV'
               }
             }
