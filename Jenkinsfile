@@ -12,7 +12,7 @@ podTemplate(label: label,
     node(label) {
          
         checkout scm
-        git 'https://github.com/katson95/pet-clinic.git'
+        git 'https://github.com/katson95/pet-clinic-k8.git'
 
         def IMAGE = 'katson95/pet-clinic'
         def VERSION = 'latest'        
@@ -28,8 +28,8 @@ podTemplate(label: label,
         stage('Build and Test Image') {
             container('a-360') {
                 stage('Package into Docker Image') {
-                    sh 'docker build -t spring-petclinic:latest .'
-                    sh 'docker tag spring-petclinic:latest katson95/spring-petclinic:latest'
+                    sh 'docker build -t pet-clinic:latest .'
+                    sh 'docker tag pet-clinic:latest katson95/pet-clinic:latest'
                 }
             }
         }
@@ -47,9 +47,9 @@ podTemplate(label: label,
 
         stage('Deploy To Dev') {
             container('i360-agent'){  
-                stage('List All Pods') {
+                stage('Deploy To Dev') {
                     sh 'kubectl create ns DEV'
-                    sh 'kubectl create -f ./pet-clinic/ --namespace=DEV'
+                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=DEV'
               }
             }
         }
