@@ -54,7 +54,7 @@ podTemplate(label: label,
                 stage('Deploy To Dev') {
                     sh 'ls -lta pet-clinic-k8'
                     sh 'kubectl get ns dev || kubectl create ns dev'
-                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=DEV'
+                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=dev'
               }
             }
         }
