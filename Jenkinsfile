@@ -17,8 +17,8 @@ podTemplate(label: label,
             git url: 'https://github.com/katson95/pet-clinic-k8.git'
         }
          
-        def IMAGE = 'katson95/pet-clinic'
-        def VERSION = 'latest'        
+        def IMAGE_NAMES = 'katson95/pet-clinic'
+        def IMAGE_VERSION = 'latest'        
         
        stage('Get a Maven project') {
             container('maven') {
@@ -42,7 +42,7 @@ podTemplate(label: label,
                 stage('Publish Image to Docker Registry') {
                   withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                    sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
-                   sh "docker push ${IMAGE}:${VERSION}"
+                   sh "docker push ${IMAGE_NAME}:${IMAGE_VERSION}"
                 }
               }
             }
@@ -52,7 +52,6 @@ podTemplate(label: label,
              
             container('i360-agent'){  
                 stage('Deploy To Dev') {
-                    sh 'ls -lta pet-clinic-k8'
                     sh 'kubectl get ns dev || kubectl create ns dev'
                     sh 'kubectl create -f ./pet-clinic-k8/ --namespace=dev'
               }
