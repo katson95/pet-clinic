@@ -12,8 +12,11 @@ podTemplate(label: label,
     node(label) {
          
         checkout scm
-        git url: 'https://github.com/katson95/pet-clinic-k8.git'
-
+         
+        dir('pet-clinic-k8') {
+            git url: 'https://github.com/katson95/pet-clinic-k8.git'
+        }
+         
         def IMAGE = 'katson95/pet-clinic'
         def VERSION = 'latest'        
         
