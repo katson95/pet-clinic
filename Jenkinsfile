@@ -48,7 +48,8 @@ podTemplate(label: label,
              git url: 'https://github.com/katson95/pet-clinic-k8.git'
             container('i360-agent'){  
                 stage('Deploy To Dev') {
-                    sh 'kubectl create ns dev'
+                    sh 'ls -lta'
+                    sh 'kubectl get ns dev || kubectl create ns dev'
                     sh 'kubectl create -f ./pet-clinic-k8/ --namespace=DEV'
               }
             }
