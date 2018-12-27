@@ -12,7 +12,6 @@ podTemplate(label: label,
     node(label) {
          
         checkout scm
-        git 'https://github.com/katson95/pet-clinic-k8.git'
 
         def IMAGE = 'katson95/pet-clinic'
         def VERSION = 'latest'        
@@ -46,6 +45,7 @@ podTemplate(label: label,
         }
 
         stage('Deploy To Dev') {
+             git url: 'https://github.com/katson95/pet-clinic-k8.git'
             container('i360-agent'){  
                 stage('Deploy To Dev') {
                     sh 'kubectl create ns dev'
