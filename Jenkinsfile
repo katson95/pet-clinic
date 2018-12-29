@@ -32,7 +32,7 @@ podTemplate(label: label,
             container('a-360') {
                 stage('Package into Docker Image') {
                     sh 'docker build -t pet-clinic:latest .'
-                    sh 'docker tag pet-clinic:latest docker.ops.dev.invent-360.com:5000/katson95/pet-clinic:latest'
+                    sh 'docker tag pet-clinic:latest docker.ops.dev.invent-360.com/katson95/pet-clinic:latest'
                 }
             }
         }
@@ -41,8 +41,8 @@ podTemplate(label: label,
             container('a-360'){  
                 stage('Publish Image to Docker Registry') {
                   withCredentials([usernamePassword(credentialsId: 'i360-nexus-id', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
-                   sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.dev.invent-360.com:5000"
-                   sh "docker push docker.ops.dev.invent-360.com:5000/${IMAGE_NAME}:${IMAGE_VERSION}"
+                   sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.dev.invent-360.com"
+                   sh "docker push docker.ops.dev.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}"
                 }
               }
             }
