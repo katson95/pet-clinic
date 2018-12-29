@@ -48,12 +48,12 @@ podTemplate(label: label,
             }
         }
 
-        stage('Deploy To Dev') {
+        stage('Deploy To UAT') {
              
             container('i360-agent'){  
-                stage('Deploy To Dev') {
-                    sh 'kubectl get ns dev || kubectl create ns dev'
-                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=dev'
+                stage('Deploy To uat') {
+                    sh 'kubectl get ns uat || kubectl create ns uat'
+                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=uat'
               }
             }
         }
