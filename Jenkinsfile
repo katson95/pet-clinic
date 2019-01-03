@@ -18,7 +18,7 @@ podTemplate(label: label,
         }
          
         def IMAGE_NAME = 'katson95/pet-clinic'
-        def IMAGE_VERSION = 'latest'        
+        def IMAGE_VERSION = '1.1'        
         
        stage('Get a Maven project') {
             container('maven') {
@@ -44,16 +44,6 @@ podTemplate(label: label,
                    sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.dev.invent-360.com"
                    sh "docker push docker.ops.dev.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}"
                 }
-              }
-            }
-        }
-
-        stage('Deploy To UAT') {
-             
-            container('i360-agent'){  
-                stage('Deploy To uat') {
-                    sh 'kubectl get ns uat || kubectl create ns uat'
-                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=uat'
               }
             }
         }
