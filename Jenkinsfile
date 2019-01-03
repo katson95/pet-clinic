@@ -2,7 +2,7 @@ def label = "mypod-${UUID.randomUUID().toString()}"
 podTemplate(label: label, 
      containers: [
         containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'a-360', image: 'katson95/a-360:latest', ttyEnabled: true, command: 'cat')
+        containerTemplate(name: 'sigma-agent', image: 'invent360/sigma-agent', ttyEnabled: true, command: 'cat')
      ], 
      volumes: [
         persistentVolumeClaim(mountPath: '/root/.m2/repository', claimName: 'jenkins', readOnly: false),
@@ -28,7 +28,7 @@ podTemplate(label: label,
         }
          
         stage('Build and Test Image') {
-            container('a-360') {
+            container('sigma-agent') {
                 stage('Package into Docker Image') {
                     sh 'docker build -t pet-clinic:latest .'
                     sh 'docker tag pet-clinic:latest docker.ops.dev.invent-360.com/katson95/pet-clinic:latest'
@@ -37,7 +37,7 @@ podTemplate(label: label,
         }
 
         stage('Publish Image') {
-            container('a-360'){  
+            container('sigma-agent'){  
                 stage('Publish Image to Docker Registry') {
                   withCredentials([usernamePassword(credentialsId: 'i360-nexus-id', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                    sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.dev.invent-360.com"
