@@ -30,7 +30,7 @@ podTemplate(label: label,
         stage('Build and Test Image') {
             container('sigma-agent') {
                 stage('Package into Docker Image') {
-                    sh 'docker build -t petclinic:${IMAGE_VERSION} .'
+                    sh 'docker build -t petclinic:1.1 .'
                     sh 'docker tag petclinic:latest docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}'
                 }
             }
