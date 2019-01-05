@@ -31,7 +31,7 @@ podTemplate(label: label,
             container('sigma-agent') {
                 stage('Package into Docker Image') {
                     sh 'docker build -t petclinic:1.1 .'
-                    sh 'docker tag petclinic:latest docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}'
+                    sh 'docker tag petclinic:latest docker.ops.invent-360.com/invent360/petclinic:1.1'
                 }
             }
         }
@@ -41,7 +41,7 @@ podTemplate(label: label,
                 stage('Publish Image to Docker Registry') {
                   withCredentials([usernamePassword(credentialsId: 'i360-nexus-id', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                    sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.invent-360.com"
-                   sh "docker push docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}"
+                   sh "docker push docker.ops.invent-360.com/invent360/petclinic:1.1"
                 }
               }
             }
