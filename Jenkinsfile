@@ -16,8 +16,8 @@ podTemplate(label: label,
             git url: 'https://github.com/katson95/pet-clinic-k8.git'
         }
          
-        def IMAGE_NAME = 'katson95/pet-clinic'
-        def IMAGE_VERSION = '1.1'        
+        def IMAGE_NAME = 'invent360/petclinic'
+        def IMAGE_VERSION = '1.1'
         
        stage('Get a Maven project') {
             container('maven') {
@@ -30,8 +30,8 @@ podTemplate(label: label,
         stage('Build and Test Image') {
             container('sigma-agent') {
                 stage('Package into Docker Image') {
-                    sh 'docker build -t pet-clinic:${IMAGE_VERSION} .'
-                    sh 'docker tag pet-clinic:latest docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}'
+                    sh 'docker build -t petclinic:${IMAGE_VERSION} .'
+                    sh 'docker tag petclinic:latest docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}'
                 }
             }
         }
