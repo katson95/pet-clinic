@@ -1,9 +1,8 @@
 def label = "mypod-${UUID.randomUUID().toString()}"
 podTemplate(label: label, 
      containers: [
-        containerTemplate(name: 'i360-agent', image: 'katson95/i360-agent:2.0',ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'sigma-agent', image: 'invent360/sigma-agent:latest',ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'a-360', image: 'katson95/a-360:latest', ttyEnabled: true, command: 'cat'),
      ], 
      volumes: [
         persistentVolumeClaim(mountPath: '/root/.m2/repository', claimName: 'jenkins', readOnly: false),
@@ -17,8 +16,8 @@ podTemplate(label: label,
             git url: 'https://github.com/katson95/pet-clinic-k8.git'
         }
          
-        def IMAGE_NAME = 'katson95/pet-clinic'
-        def IMAGE_VERSION = 'latest'        
+        def IMAGE_NAME = 'invent360/petclinic'
+        def IMAGE_VERSION = '1.0'        
         
        stage('Get a Maven project') {
             container('maven') {
@@ -29,31 +28,21 @@ podTemplate(label: label,
         }
          
         stage('Build and Test Image') {
-            container('a-360') {
+            container('sigma-agent') {
                 stage('Package into Docker Image') {
-                    sh 'docker build -t pet-clinic:latest .'
-                    sh 'docker tag pet-clinic:latest docker.ops.dev.invent-360.com/katson95/pet-clinic:latest'
+                    sh 'docker build -t petclinic:${IMAGE_VERSION} .'
+                    sh 'docker tag petclinic:1.0 docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}'
                 }
             }
         }
 
         stage('Publish Image') {
-            container('a-360'){  
+            container('sigma-agent'){  
                 stage('Publish Image to Docker Registry') {
                   withCredentials([usernamePassword(credentialsId: 'i360-nexus-id', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
-                   sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.dev.invent-360.com"
-                   sh "docker push docker.ops.dev.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}"
+                   sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword} docker.ops.invent-360.com"
+                   sh "docker push docker.ops.invent-360.com/${IMAGE_NAME}:${IMAGE_VERSION}"
                 }
-              }
-            }
-        }
-
-        stage('Deploy To UAT') {
-             
-            container('i360-agent'){  
-                stage('Deploy To uat') {
-                    sh 'kubectl get ns uat || kubectl create ns uat'
-                    sh 'kubectl create -f ./pet-clinic-k8/ --namespace=uat'
               }
             }
         }
